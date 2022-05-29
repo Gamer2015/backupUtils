@@ -39,17 +39,6 @@ class Ignorer:
         sameSize = os.path.getsize(target) == os.path.getsize(source)
         return sameSize
 
-
-    def ignore_by_quality(self, source, target):
-        biggerSize = os.path.getsize(source) > os.path.getsize(target)
-        if biggerSize == False: return False # doesn't have better quality
-
-        root, ext = os.path.splitext(source)
-        if ext not in [".jpg", ".png", ".jpeg"]:
-            return False # is not something that has a quality
-
-        return True
-
     # def ignore_by_size_big(self, source, target):
     #     if os.path.isfile(target) == False:
     #         return False 
@@ -68,7 +57,6 @@ class Ignorer:
 
         if self.ignore_by_mtime(source, target): return True
         if self.ignore_by_size(source, target): return True
-        if self.ignore_by_quality(source, target): return True
         return False
 
 

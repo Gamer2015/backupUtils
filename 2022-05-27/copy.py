@@ -2,7 +2,7 @@ import os
 import shutil
 import functools
 import argparse
-import distutils.dir_util
+
  
 parser = argparse.ArgumentParser(description='Copy files from source_directory to target_directory if it does not already exist or if the file in source_directory is newer.')
 parser.add_argument('source_directory', help='source directory')
@@ -31,44 +31,16 @@ class Ignorer:
         if os.path.isfile(target) == False:
             return False 
 
-        newer = os.path.getmtime(source) > os.path.getmtime(target)
+        newer = int(os.path.getmtime(source)) > int(os.path.getmtime(target) + 1)
+        if newer:
+            print("source: %f: %s" % (os.path.getmtime(source), source))
+            print("source: %f: %s" % (os.path.getmtime(target), target))
         return newer == False
-
-
-    def ignore_by_size(self, source, target):
-        sameSize = os.path.getsize(target) == os.path.getsize(source)
-        return sameSize
-
-
-    def ignore_by_quality(self, source, target):
-        biggerSize = os.path.getsize(source) > os.path.getsize(target)
-        if biggerSize == False: return False # doesn't have better quality
-
-        root, ext = os.path.splitext(source)
-        if ext not in [".jpg", ".png", ".jpeg"]:
-            return False # is not something that has a quality
-
-        return True
-
-    # def ignore_by_size_big(self, source, target):
-    #     if os.path.isfile(target) == False:
-    #         return False 
-
-    #     sameSize = os.path.getsize(source) == os.path.getsize(target)
-    #     bigEnough = os.path.getsize(source) > 2**20 # 1 MB, "big enough" to not be a text file
-    #     if sameSize :
-    #         print("source: %f: %s" % (os.path.getmtime(source), source))
-    #         print("target: %f: %s" % (os.path.getmtime(target), target))
-    #     return newer == False
 
     def ignore(self, source, target):
         path, name = os.path.split(source)
         if self.ignore_by_pattern(path, name): return True
-        if os.path.isfile(target) == False: return False 
-
         if self.ignore_by_mtime(source, target): return True
-        if self.ignore_by_size(source, target): return True
-        if self.ignore_by_quality(source, target): return True
         return False
 
 
