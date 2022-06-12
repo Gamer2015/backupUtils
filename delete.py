@@ -14,7 +14,7 @@ def input_int(prompt):
     val = None
     while val == None:
         try:
-            year = int(input(prompt))
+            val = int(input(prompt))
         except Exception as e:
             print(e)
     return val
