@@ -41,13 +41,17 @@ def run():
 
     cleanup_date = datetime.datetime(year, month, day)
     print("deleting files that are older than: %s" % cleanup_date.isoformat())
+    if input("Do you want to continue? (y/N)").lower() != "y":
+        return
+
+    cleanup_timestamp = cleanup_date.timestamp()
 
     # delete files, (but not folders!)
     for root, dirs, files in os.walk(args.delete_directory):
         for name in files:
             filepath = os.path.join(root, name)
-            modification_time = datetime.datetime.fromtimestamp(os.path.getmtime(filepath))
-            if modification_time < cleanup_date:
+            modification_timestamp = os.path.getmtime(filepath)
+            if modification_timestamp < cleanup_timestamp:
                 print("deleting: %s" % filepath)
                 os.remove(filepath)
 
