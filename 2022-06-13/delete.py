@@ -50,10 +50,6 @@ def run():
     for root, dirs, files in os.walk(args.delete_directory):
         for name in files:
             filepath = os.path.join(root, name)
-            if os.path.exists(filepath) == False:
-                # must have been deleted since walking
-                continue
-
             modification_timestamp = os.path.getmtime(filepath)
             if modification_timestamp < cleanup_timestamp:
                 print("deleting: %s" % filepath)
