@@ -85,7 +85,7 @@ def run():
         patterns.reverse()
         ignorer.patterns = patterns
 
-    copy = lambda source, target: shutil.copy2(source, target, follow_symlinks=False)
+    copy = lambda source, target: shutil.copy(source, target, follow_symlinks=False)
     makedirs = lambda name: os.makedirs(name, exist_ok=True)
     if args.check: # use dummy methods instead
         copy = lambda a,b: 0
